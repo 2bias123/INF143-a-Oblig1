@@ -1,38 +1,43 @@
+def shift_left(inp, n):
+    return inp[n:] + inp[:n]
 
-
-def cyclic_shift(inp, shiftdegree: int):
-    return inp[shiftdegree:] + inp[:shiftdegree]
-
+print(shift_left("10110011", 3))
 
 #Skal denne kjøre akkurat 4 ganger
 def simon_cipher_rounds(inp, roundkey):
-    frstBlock = inp[8:]
-    sndBlock = inp[:8]
+    leftBlock = inp[:8]
+    rightBlock =inp[8:]
 
-    frstBlockShift1 = cyclic_shift(frstBlock,1)
-    frstBlockShift5 = cyclic_shift(frstBlock,5)
-    #Logical and of the two cyclic shifts above
-    andfirstShifts = frstBlockShift1 & frstBlockShift5
+    shift1 = int(shift_left(leftBlock,1),2)
+    shift5 = int(shift_left(leftBlock,5),2)
 
-    #xor of the right block and the andfirstShifts
-    firstshiftsxored = andfirstShifts ^ sndBlock
+    #Bitwise and of the leftBlock shifted 1 and 5
+    and15 = shift1 & shift5
 
-    frstBlockShift2 = cyclic_shift(frstBlock,5)
+    #Bitwise xor of the rightBlock and the and15
+    xorOfRightAndand15 = int(rightBlock,2) ^ and15
 
-    #xor of firstShiftsxored and frstBlockshift 2
-    xored1 = firstshiftsxored ^ frstBlockShift2
+    shift2 = int(shift_left(leftBlock,2),2)
 
-    #xor of xored1 with roundkey
-    roundkeyxor = xored1 ^ roundkey
+    #Bitwise xor of the xorOfRightAndand15 and the leftBlock shifted 2
+    xorOfRightAndand15AndShift2 = xorOfRightAndand15 ^ shift2
 
-    return roundkeyxor + frstBlock
+    #Bitwise xor of the xorOfRightAndand15AndShift2 and the roundkey
+    xorOfRightAndand15AndShift2AndRoundkey = bin(xorOfRightAndand15AndShift2 ^ int(roundkey,2))[2:]
+
+    return str(xorOfRightAndand15AndShift2AndRoundkey) + leftBlock
+
+def swapMiddle(inp):
+    return inp[8:] + inp[:8]
 
 def simon_cipher(inp, key):
     tmp = inp
     chunks = [key[x:x+8] for x in range(0, len(key), 8)]
     for i in range(4):
-        tmp = simon_cipher(tmp,chunks[i])
-        # print(chunks[i])
-    return tmp
+        tmp = simon_cipher_rounds(tmp,chunks[i])
+        # print(tmp)
+    
+    return swapMiddle(tmp)
 
-simon_cipher(1,"1"*32)
+print(simon_cipher("1011001111110000","01000100000110101000101000111000"))
+
