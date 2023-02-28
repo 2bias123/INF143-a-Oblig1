@@ -59,4 +59,5 @@ with open("outputTask2.txt","w") as out:
         x = [int(digit) for digit in bin(i)[2:].zfill(6)] # convert integer to binary and pad with zeros
         for j in range(2**6):
             k = [int(digit) for digit in bin(j)[2:].zfill(6)]
-            out.write(format(k,x,irr_pol))
+            out.write(format(k,x,calculate_function(k,x,irr_pol)))
+
