@@ -1,43 +1,38 @@
-def shift_left(inp, n):
-    return inp[n:] + inp[:n]
-
-print(shift_left("10110011", 3))
+import bit_operations as bit_op
 
 #Skal denne kjøre akkurat 4 ganger
-def simon_cipher_rounds(inp, roundkey):
-    leftBlock = inp[:8]
-    rightBlock =inp[8:]
+def simon_cipher_rounds(inp: list[int], roundkey: list[int]):
+    left_block: list = inp[:8]
+    right_block: list = inp[8:]
 
-    shift1 = int(shift_left(leftBlock,1),2)
-    shift5 = int(shift_left(leftBlock,5),2)
+    left_shift_1 = bit_op.left_cyclic_shift(left_block,1)
+    left_shift_5 = bit_op.left_cyclic_shift(left_block,5)
+    left_shift_2 = bit_op.left_cyclic_shift(left_block,2)
 
-    #Bitwise and of the leftBlock shifted 1 and 5
-    and15 = shift1 & shift5
+    shift_1_and_shift_5 = bit_op.bitwise_and_lst(left_shift_1,left_shift_5)
 
-    #Bitwise xor of the rightBlock and the and15
-    xorOfRightAndand15 = int(rightBlock,2) ^ and15
+    xor_of_and = bit_op.lstxor(right_block,shift_1_and_shift_5)
 
-    shift2 = int(shift_left(leftBlock,2),2)
+    xor_shift_2 = bit_op.lstxor(xor_of_and,left_shift_2)
 
-    #Bitwise xor of the xorOfRightAndand15 and the leftBlock shifted 2
-    xorOfRightAndand15AndShift2 = xorOfRightAndand15 ^ shift2
+    xor_roundkey = bit_op.lstxor(xor_shift_2,roundkey)
 
-    #Bitwise xor of the xorOfRightAndand15AndShift2 and the roundkey
-    xorOfRightAndand15AndShift2AndRoundkey = bin(xorOfRightAndand15AndShift2 ^ int(roundkey,2))[2:]
+    return xor_roundkey + left_block
 
-    return str(xorOfRightAndand15AndShift2AndRoundkey) + leftBlock
+plaintext = [1,0,1,1,0,0,1,1,1,1,1,1,0,0,0,0]
 
-def swapMiddle(inp):
-    return inp[8:] + inp[:8]
+roundkey = [0,1,0,0,0,1,0,0,0,0,0,1,1,0,1,0,1,0,0,0,1,0,1,0,0,0,1,1,1,0,0,0]
+
+def roundkey_generator(roundkey, nmbr_of_rounds):
+    return [roundkey[i:i + nmbr_of_rounds] for i in range(0, len(roundkey), nmbr_of_rounds)]
 
 def simon_cipher(inp, key):
+    roundkeys = roundkey_generator(roundkey,8)
     tmp = inp
-    chunks = [key[x:x+8] for x in range(0, len(key), 8)]
     for i in range(4):
-        tmp = simon_cipher_rounds(tmp,chunks[i])
-        # print(tmp)
-    
-    return swapMiddle(tmp)
+        tmp = simon_cipher_rounds(tmp,roundkeys[i])
+    return tmp
 
-print(simon_cipher("1011001111110000","01000100000110101000101000111000"))
+
+print(simon_cipher(plaintext,roundkey))
 

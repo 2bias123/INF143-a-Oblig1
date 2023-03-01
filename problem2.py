@@ -1,18 +1,11 @@
-# Adition is basicly bitwise xor
+import bit_operations as bit_op
 
+# Adition is basicly bitwise xor
 def addition(x: list, k: list):
     retlst: list = []
     for i in range(len(x)):
         retlst.append(x[i] ^ k[i])
     return retlst
-
-
-def lstxor(a: list, b: list):
-    outs: list = []
-    for i in range(len(a)):
-        outs.append(a[i] ^ b[i])
-    return outs
-
 
 irr_pol = [1,1,0,0,0,0]
 
@@ -23,14 +16,14 @@ def shift(x: list, poly: list, shift: int) -> list:
         x = [0] + x
         popped = x.pop()
         if popped == 1:
-            x = lstxor(poly,x)
+            x = bit_op.lstxor(poly,x)
     return x
 
 def mult(a: list,b: list, output: list, irreducible: list) -> list:
     for i in range(len(a)):
         if b[i] == 1:
             shifted = shift(a,irreducible,i)
-            output = lstxor(shifted,output)
+            output = bit_op.lstxor(shifted,output)
         return output
 
 def pow(a: list, exp: int, irreducible: list):
