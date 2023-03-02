@@ -9,8 +9,6 @@ def addition(x: list, k: list):
 
 irr_pol = [1,1,0,0,0,0]
 
-
-
 def shift(x: list, poly: list, shift: int) -> list:
     for _ in range(shift):
         x = [0] + x
@@ -24,21 +22,22 @@ def mult(a: list,b: list, output: list, irreducible: list) -> list:
         if b[i] == 1:
             shifted = shift(a,irreducible,i)
             output = bit_op.lstxor(shifted,output)
-        return output
+            # print("u",output)
+    return output
 
 def pow(a: list, exp: int, irreducible: list):
-    for _ in range(exp):
-        a = mult(a,a,[0,0,0,0,0,0],irreducible)
-    return a
+    temp = a
+    for _ in range(exp-1):
+        temp = mult(temp,a,[0,0,0,0,0,0],irreducible)
+    return temp
 
+#F (x, k) = x^3 + (x + k)^3 + k
 def calculate_function(k,x,irreducible):
-    frstpart = pow(x,3,irreducible)
-    middle_of_parentheses = addition(k,x)
-    pow_parentheses = pow(middle_of_parentheses,3,irreducible)
-    frsttwo = addition(frstpart,pow_parentheses)
-    therest = addition(frsttwo,k)
-    return therest
-
+    x3 = pow(x,3,irreducible)
+    k3 = pow(addition(x,k),3,irreducible)
+    add1 = addition(x3,k3)
+    add2 = addition(add1,k)
+    return add2
 # print(calculate_function([0,0,0,0,0,0],[0,0,0,0,0,0],irr_pol))
 
 def format(x,k,putout):
@@ -53,4 +52,6 @@ with open("outputTask2.txt","w") as out:
         for j in range(2**6):
             k = [int(digit) for digit in bin(j)[2:].zfill(6)]
             out.write(format(k,x,calculate_function(k,x,irr_pol)))
+
+
 

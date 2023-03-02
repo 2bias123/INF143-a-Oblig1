@@ -26,13 +26,13 @@ roundkey = [0,1,0,0,0,1,0,0,0,0,0,1,1,0,1,0,1,0,0,0,1,0,1,0,0,0,1,1,1,0,0,0]
 def roundkey_generator(roundkey, nmbr_of_rounds):
     return [roundkey[i:i + nmbr_of_rounds] for i in range(0, len(roundkey), nmbr_of_rounds)]
 
-def simon_cipher(inp, key):
+def simon_cipher(inp):
     roundkeys = roundkey_generator(roundkey,8)
     tmp = inp
     for i in range(4):
         tmp = simon_cipher_rounds(tmp,roundkeys[i])
-    return tmp
+    return tmp[8:] + tmp[:8]
 
 
-print(simon_cipher(plaintext,roundkey))
+print(simon_cipher(plaintext))
 

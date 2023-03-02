@@ -25,3 +25,4 @@ def right_cyclic_shift(to_be_shifted: list, shift_value: int):
         popped = shifted_list.pop()
         shifted_list.insert(0,popped)
     return shifted_list
+
