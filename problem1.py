@@ -21,7 +21,6 @@ def lfsr(polynomial: list, initialState: list, itr: int, returnval: list) -> lis
 
         res: int = selectedcells[0]
         for i in range(1,len(selectedcells)):
-            #res ^= selectedcells[i]
             res = xor(res, selectedcells[i])
 
         returnval.append(initialState.pop())
@@ -32,6 +31,7 @@ def lfsr(polynomial: list, initialState: list, itr: int, returnval: list) -> lis
 
 
 outs: list = lfsr(pol,initial,500,[])
-with open("outputTask1.txt","w") as out:
+with open("answerTask1.txt","w") as out:
     for i in outs:
         out.write(str(i))
+

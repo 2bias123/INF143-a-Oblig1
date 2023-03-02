@@ -38,7 +38,6 @@ def calculate_function(k,x,irreducible):
     add1 = addition(x3,k3)
     add2 = addition(add1,k)
     return add2
-# print(calculate_function([0,0,0,0,0,0],[0,0,0,0,0,0],irr_pol))
 
 def format(x,k,putout):
     x_format = "".join([str(a) for a in x ])
@@ -46,7 +45,7 @@ def format(x,k,putout):
     putout_format = "".join([str(a) for a in putout])
     return f"{x_format},{k_format}->{putout_format}\n"
 
-with open("outputTask2.txt","w") as out:
+with open("answerTask2.txt","w") as out:
     for i in range(2**6): # iterate over all possible values of x and k
         x = [int(digit) for digit in bin(i)[2:].zfill(6)] # convert integer to binary and pad with zeros
         for j in range(2**6):
