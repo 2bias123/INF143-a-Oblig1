@@ -44,7 +44,8 @@ def lfsr(polynomial: list, initialState: list, itr: int, returnval: list) -> lis
 outs: list = lfsr(pol,initial,500,[])
 
 # write the output bits to a file named "answerTask1.txt"
-with open("answerTask1.txt","w") as out:
-    for i in outs:
-        out.write(str(i))
+def write_to_file(filename: str, outs: list):
+    with open(filename,"w") as out:
+        for i in outs:
+            out.write(str(i))
 

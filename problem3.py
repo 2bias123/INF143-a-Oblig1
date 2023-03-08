@@ -54,5 +54,3 @@ def decrypt(ciphertext_file: str,key_file: str) -> list:
         decrypted = simon_cipher(plaintext_line,roundkey_generator(key_line,8)[::-1])
         out.write("".join([str(i) for i in decrypted]))
 
-encrypt("sample_data\cipher_in2.txt","sample_data\cipher_key.txt")
-decrypt("answerTask3Encrypted.txt","sample_data\cipher_key.txt")
